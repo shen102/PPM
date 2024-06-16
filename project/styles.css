@@ -1,0 +1,51 @@
+/* Style for the navigation */
+.nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* Style for the navigation items */
+.nav li {
+    float: left;
+}
+
+/* Style for the navigation links */
+.nav a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change color on hover */
+.nav a:hover {
+    background-color: #111;
+}
+
+/* Style for the dropdown content */
+.nav ul {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Show dropdown content on hover */
+.nav li:hover ul {
+    display: block;
+}
+
+/* Style for the dropdown items */
+.nav li ul li {
+    float: none;
+    color: black;
+}
+
+/* Style for the logout link */
+.nav li:last-child {
+    float: right;
+}
