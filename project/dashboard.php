@@ -1,3 +1,50 @@
+<?php
+session_start();
+include 'config.php';
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Fetch project count
+$sql = "SELECT COUNT(*) AS project_count FROM projects WHERE user_id = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$user_id]);
+$project_count = $stmt->fetchColumn();
+
+// Fetch portfolio count
+$sql = "SELECT COUNT(*) AS portfolio_count FROM portfolios WHERE user_id = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$user_id]);
+$portfolio_count = $stmt->fetchColumn();
+
+// Fetch task count
+$sql = "SELECT COUNT(*) AS task_count FROM tasks 
+        JOIN projects ON tasks.project_id = projects.id 
+        WHERE projects.user_id = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$user_id]);
+$task_count = $stmt->fetchColumn();
+
+// Fetch recent projects
+$sql = "SELECT * FROM projects WHERE user_id = ? ORDER BY start_date DESC LIMIT 5";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$user_id]);
+$recent_projects = $stmt->fetchAll();
+
+// Fetch recent tasks
+$sql = "SELECT tasks.* FROM tasks 
+        JOIN projects ON tasks.project_id = projects.id 
+        WHERE projects.user_id = ? ORDER BY tasks.start_date DESC LIMIT 5";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$user_id]);
+$recent_tasks = $stmt->fetchAll();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,9 +92,8 @@
                     <li><a href="create_task.php">Create Task</a></li>
                 </ul>
             </li>
-            <li style="float: right;"><a href="logout.php">Logout</a></li>
+            <li><a href="logout.php">Logout</a></li>
         </ul>
-        
         
     </div>
 </body>
