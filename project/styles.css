@@ -1,10 +1,5 @@
 body {
     background-color: pink;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
 }
 
 /* Style for the navigation */
@@ -14,9 +9,6 @@ body {
     padding: 0;
     overflow: hidden;
     background-color: white;
-    position: absolute;
-    top: 0;
-    width: 100%;
 }
 
 /* Style for the navigation items */
@@ -43,7 +35,7 @@ body {
 .nav ul {
     display: none;
     position: absolute;
-    background-color: white;
+    background-color:white;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     z-index: 1;
     min-width: 160px;
@@ -74,38 +66,4 @@ body {
 /* Style for the logout link */
 .nav li:last-child {
     float: right;
-}
-
-.form-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    
-}
-
-/* Style for the form elements */
-.form-container input[type="text"],
-.form-container input[type="date"],
-.form-container textarea {
-    width: calc(100% - 22px);
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.form-container input[type="submit"] {
-    width: 150px;
-    padding: 10px 20px;
-    background-color: #ff0090;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.form-container input[type="submit"]:hover {
-    background-color: #fb5aaa;
 }
