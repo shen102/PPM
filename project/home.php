@@ -37,13 +37,15 @@ $stmt->execute([$user_id]);
 $recent_projects = $stmt->fetchAll();
 
 // Fetch recent tasks
-$sql = "SELECT tasks.* FROM tasks 
+// Fetch task count
+$sql = "SELECT COUNT(*) AS task_count FROM tasks 
         JOIN projects ON tasks.project_id = projects.id 
-        WHERE projects.user_id = ? ORDER BY tasks.start_date DESC LIMIT 5";
+        WHERE projects.user_id = ?";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$user_id]);
-$recent_tasks = $stmt->fetchAll();
+$task_count = $stmt->fetchColumn();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -113,7 +115,7 @@ $recent_tasks = $stmt->fetchAll();
         .button-container {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 300px;
         }
 
         .button-container form {
@@ -121,7 +123,7 @@ $recent_tasks = $stmt->fetchAll();
         }
 
         .button {
-            padding: 10px 20px;
+            padding: 50px 50px;
             background-color: #007bff;
             color: white;
             border: none;
@@ -158,16 +160,16 @@ $recent_tasks = $stmt->fetchAll();
     </header>
 
     <div class="button-container">
-        <form method="post" action="All_residents_dashboard.php">
-            <button type="submit" name="button1" class="button">Project</button>
-        </form>
-        <form method="post" action="blotter_report.php">
-            <button type="submit" name="button2" class="button">Tasks</button>
-        </form>
-        <form method="post" action="req_id_dashboard.php">
-            <button type="submit" name="button3" class="button">Portfolio</button>
-        </form>
-    </div>
+    <form method="post" action="All_residents_dashboard.php">
+        <button type="submit" name="button1" class="button">Projects (<?php echo $project_count; ?>)</button>
+    </form>
+    <form method="post" action="blotter_report.php">
+        <button type="submit" name="button2" class="button">Tasks (<?php echo $task_count; ?>)</button>
+    </form>
+    <form method="post" action="req_id_dashboard.php">
+        <button type="submit" name="button3" class="button">Portfolios (<?php echo $portfolio_count; ?>)</button>
+    </form>
+</div>
 
 
     </div>
