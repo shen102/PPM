@@ -15,7 +15,7 @@
 /* Style for the navigation links */
 .nav a {
     display: block;
-    color: white;
+    color: rgb(15, 1, 1);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -24,13 +24,14 @@
 /* Change color on hover */
 .nav a:hover {
     background-color: #111;
+    
 }
 
 /* Style for the dropdown content */
 .nav ul {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    color: #110202;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
