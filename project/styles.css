@@ -1,10 +1,22 @@
+body {
+    background-color: pink;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
 /* Style for the navigation */
 .nav {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 /* Style for the navigation items */
@@ -19,20 +31,22 @@
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    font-size: 20px;
 }
 
 /* Change color on hover */
 .nav a:hover {
-    background-color: #111;
-    
+    background-color: #ff5d8f;
 }
 
 /* Style for the dropdown content */
 .nav ul {
     display: none;
     position: absolute;
-    color: #110202;
+    background-color: white;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    min-width: 160px;
 }
 
 /* Show dropdown content on hover */
@@ -43,10 +57,55 @@
 /* Style for the dropdown items */
 .nav li ul li {
     float: none;
-    color: black;
+}
+
+.nav li ul li a {
+    padding: 12px 16px;
+    color: rgb(15, 1, 1);
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.nav li ul li a:hover {
+    background-color: #ff5d8f;
 }
 
 /* Style for the logout link */
 .nav li:last-child {
     float: right;
+}
+
+.form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    
+}
+
+/* Style for the form elements */
+.form-container input[type="text"],
+.form-container input[type="date"],
+.form-container textarea {
+    width: calc(100% - 22px);
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-container input[type="submit"] {
+    width: 150px;
+    padding: 10px 20px;
+    background-color: #ff0090;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.form-container input[type="submit"]:hover {
+    background-color: #fb5aaa;
 }
