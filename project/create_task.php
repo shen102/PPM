@@ -3,101 +3,106 @@ session_start();
 include 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $project_id = $_POST['project_id'];
-    $name = $_POST['name'];
-    $description = $_POST['description'];
-    $start_date = $_POST['start_date'];
-    $end_date = $_POST['end_date'];
-    $status = $_POST['status'];
+    // Retrieve and sanitize form data
+    $project_id = filter_var($_POST['project_id'], FILTER_SANITIZE_NUMBER_INT);
+    $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+    $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING);
+    $start_date = $_POST['start_date']; // You may consider validating the date format
+    $end_date = $_POST['end_date']; // You may consider validating the date format
+    $status = filter_var($_POST['status'], FILTER_SANITIZE_STRING);
 
-    $sql = "INSERT INTO tasks (project_id, name, description, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)";
-    $stmt = $pdo->prepare($sql);
-    if ($stmt->execute([$project_id, $name, $description, $start_date, $end_date, $status])) {
-        echo "Task created successfully";
-    } else {
-        echo "Error creating task";
+    try {
+        // Disable foreign key checks
+        $pdo->exec('SET foreign_key_checks = 0');
+
+        // Insert task into tasks table
+        $sql = "INSERT INTO tasks (project_id, name, description, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+
+        if ($stmt->execute([$project_id, $name, $description, $start_date, $end_date, $status])) {
+            echo "Task created successfully";
+        } else {
+            echo "Error creating task: " . $stmt->errorInfo()[2];
+        }
+
+        // Re-enable foreign key checks
+        $pdo->exec('SET foreign_key_checks = 1');
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Create Portfolio</title>
     <style>
-          body {
-    background-color: pink;
-}
+        body {
+            background-color: pink;
+        }
 
-/* Style for the navigation */
-.nav {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: white;
-}
 
-/* Style for the navigation items */
-.nav li {
-    float: left;
-}
+        body {
+            background-color: pink;
+        }
 
-/* Style for the navigation links */
-.nav a {
-    display: block;
-    color: rgb(15, 1, 1);
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 20px;
-}
+        /* Style for the navigation */
+        .sidenav {
+            height: 100%;
+            width: 300px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #013220;
+            overflow-x: hidden;
+            padding-top: 20px;
+            border-right: 20px solid #013220;
+            justify-content: center;
+        }
 
-/* Change color on hover */
-.nav a:hover {
-    background-color: #ff5d8f;
-}
+        ul {
+            list-style-type: none;
+        }
 
-/* Style for the dropdown content */
-.nav ul {
-    display: none;
-    position: absolute;
-    background-color:white;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    z-index: 1;
-    min-width: 160px;
-}
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #026943;
+            display: block;
+        }
 
-/* Show dropdown content on hover */
-.nav li:hover ul {
-    display: block;
-}
+        .sidenav a:hover {
+            color: #f1f1f1;
+            transition-duration: 0.4s;
+        }
 
-/* Style for the dropdown items */
-.nav li ul li {
-    float: none;
-}
+        .tools {
+            padding-top: 20px;
+        }
 
-.nav li ul li a {
-    padding: 12px 16px;
-    color: rgb(15, 1, 1);
-    text-decoration: none;
-    display: block;
-    text-align: left;
-}
+        .main {
+            background-color: #fff8de;
+            width: 85%;
+            height: 1000%;
+            margin-left: 300px;
+            font-size: 28px;
+            padding: 20px 50px;
+        }
 
-.nav li ul li a:hover {
-    background-color: #ff5d8f;
-}
+        .main button {
+            background-color: #013220;
+            color: #f1f1f1;
+        }
 
-/* Style for the logout link */
-.nav li:last-child {
-    float: right;
-}
 
-.form-container {
+        .form-container {
             margin-top: 100px;
-            margin-left: 500px;        
+            margin-left: 500px;
             background-color: white;
             padding: 20px;
             border-radius: 8px;
@@ -130,48 +135,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </style>
 </head>
+
 <body>
-    <ul class="nav">
-        <li><a href="#overview">Overview</a>
-            <ul>
-                <li><a href="#projects">Projects: <?php echo $project_count ?? 0; ?></a></li>
-                <li><a href="#portfolios">Portfolios: <?php echo $portfolio_count ?? 0; ?></a></li>
-                <li><a href="#tasks">Tasks: <?php echo $task_count ?? 0; ?></a></li>
-            </ul>
-        </li>
-        <li><a href="#recent-projects">Recent Projects</a>
-            <ul>
-                <?php if (!empty($recent_projects)): ?>
-                    <?php foreach ($recent_projects as $project): ?>
-                        <li><a href="#"><?php echo htmlspecialchars($project['name']); ?></a></li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li>No recent projects found.</li>
-                <?php endif; ?>
-            </ul>
-        </li>
-        <li><a href="#recent-tasks">Recent Tasks</a>
-            <ul>
-                <?php if (!empty($recent_tasks)): ?>
-                    <?php foreach ($recent_tasks as $task): ?>
-                        <li><a href="#"><?php echo htmlspecialchars($task['name']); ?></a></li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li>No recent tasks found.</li>
-                <?php endif; ?>
-            </ul>
-        </li>
-        <li><a href="#create">Create</a>
-            <ul>
-                <li><a href="create_project.php">Create Project</a></li>
-                <li><a href="create_portfolio.php">Create Portfolio</a></li>
-                <li><a href="create_task.php">Create Task</a></li>
-            </ul>
-        </li>
-        <li><a href="logout.php">Logout</a></li>
-    </ul>
+
+    <header>
+        <ul class="sidenav">
+            <!-- Profile Section -->
+            <center>
+                <li class="logo-profile">
+                    <img src="profile.png" alt="Profile Picture" class="logo-profile-photo">
+                    <div class="text-profile">
+                    </div>
+                </li>
+            </center>
+            <div class="tools">
+                <!-- Left Nav Bar -->
+                <li class="sidebar-active"><a href="home.php" style="text-decoration: none;">Home </a></li>
+                <li class="sidebar"><a href="create_project.php" style="text-decoration: none;">Create Project </a></li>
+                <li class="sidebar"><a href="create_portfolio.php" style="text-decoration: none;">Create Portfolio </a></li>
+                <li class="sidebar"> <a href="create_task.php" style="text-decoration: none;">Create Task</a></li>
+                <li class="sidebar">
+                    <a href="logout.php" style="text-decoration: none;">Logout</a>
+                </li>
+            </div>
+        </ul>
+    </header>
     <div class="form-container">
-       <center> <h2>Create Task</h2></center>
+        <center>
+            <h2>Create Task</h2>
+        </center>
         <form method="post">
             <label for="project_id">Project ID:</label>
             <input type="text" id="project_id" name="project_id" required><br>
@@ -194,5 +186,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <center><input type="submit" value="Create Task"></center>
         </form>
     </div>
-    </body>
+</body>
+
 </html>

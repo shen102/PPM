@@ -19,79 +19,64 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Create Portfolio</title>
     <style>
-          body {
-    background-color: pink;
-}
+        body {
+            background-color: pink;
+        }
 
-/* Style for the navigation */
-.nav {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: white;
-}
+        .sidenav {
+            height: 100%;
+            width: 300px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #013220;
+            overflow-x: hidden;
+            padding-top: 20px;
+            border-right: 20px solid #013220;
+            justify-content: center;
+        }
 
-/* Style for the navigation items */
-.nav li {
-    float: left;
-}
+        ul {
+            list-style-type: none;
+        }
 
-/* Style for the navigation links */
-.nav a {
-    display: block;
-    color: rgb(15, 1, 1);
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 20px;
-}
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #026943;
+            display: block;
+        }
 
-/* Change color on hover */
-.nav a:hover {
-    background-color: #ff5d8f;
-}
+        .sidenav a:hover {
+            color: #f1f1f1;
+            transition-duration: 0.4s;
+        }
 
-/* Style for the dropdown content */
-.nav ul {
-    display: none;
-    position: absolute;
-    background-color:white;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    z-index: 1;
-    min-width: 160px;
-}
+        .tools {
+            padding-top: 20px;
+        }
 
-/* Show dropdown content on hover */
-.nav li:hover ul {
-    display: block;
-}
+        .main {
+            background-color: #fff8de;
+            width: 85%;
+            height: 1000%;
+            margin-left: 300px;
+            font-size: 28px;
+            padding: 20px 50px;
+        }
 
-/* Style for the dropdown items */
-.nav li ul li {
-    float: none;
-}
+        .main button {
+            background-color: #013220;
+            color: #f1f1f1;
+        }
 
-.nav li ul li a {
-    padding: 12px 16px;
-    color: rgb(15, 1, 1);
-    text-decoration: none;
-    display: block;
-    text-align: left;
-}
-
-.nav li ul li a:hover {
-    background-color: #ff5d8f;
-}
-
-/* Style for the logout link */
-.nav li:last-child {
-    float: right;
-}
 
         .form-container {
             margin-top: 200px;
@@ -101,7 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 600px;
-            margin-top: 60px; /* To avoid overlap with fixed nav */
+            margin-top: 60px;
+            /* To avoid overlap with fixed nav */
         }
 
         .form-container input[type="text"],
@@ -128,50 +114,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </style>
 </head>
+
 <body>
-    <ul class="nav">
-        <li><a href="#overview">Overview</a>
-            <ul>
-                <li><a href="#projects">Projects: <?php echo $project_count ?? 0; ?></a></li>
-                <li><a href="#portfolios">Portfolios: <?php echo $portfolio_count ?? 0; ?></a></li>
-                <li><a href="#tasks">Tasks: <?php echo $task_count ?? 0; ?></a></li>
-            </ul>
-        </li>
-        <li><a href="#recent-projects">Recent Projects</a>
-            <ul>
-                <?php if (!empty($recent_projects)): ?>
-                    <?php foreach ($recent_projects as $project): ?>
-                        <li><a href="#"><?php echo htmlspecialchars($project['name']); ?></a></li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li>No recent projects found.</li>
-                <?php endif; ?>
-            </ul>
-        </li>
-        <li><a href="#recent-tasks">Recent Tasks</a>
-            <ul>
-                <?php if (!empty($recent_tasks)): ?>
-                    <?php foreach ($recent_tasks as $task): ?>
-                        <li><a href="#"><?php echo htmlspecialchars($task['name']); ?></a></li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li>No recent tasks found.</li>
-                <?php endif; ?>
-            </ul>
-        </li>
-        <li><a href="#create">Create</a>
-            <ul>
-                <li><a href="create_project.php">Create Project</a></li>
-                <li><a href="create_portfolio.php">Create Portfolio</a></li>
-                <li><a href="create_task.php">Create Task</a></li>
-            </ul>
-        </li>
-        <li><a href="logout.php">Logout</a></li>
+    <ul class="sidenav">
+        <!-- Profile Section -->
+        <center>
+            <li class="logo-profile">
+                <img src="profile.png" alt="Profile Picture" class="logo-profile-photo">
+                <div class="text-profile">
+                </div>
+            </li>
+        </center>
+        <div class="tools">
+            <!-- Left Nav Bar -->
+            <li class="sidebar-active"><a href="home.php" style="text-decoration: none;">Home </a></li>
+            <li class="sidebar"><a href="create_project.php" style="text-decoration: none;">Create Project </a></li>
+            <li class="sidebar"><a href="create_portfolio.php" style="text-decoration: none;">Create Portfolio </a></li>
+            <li class="sidebar"> <a href="create_task.php" style="text-decoration: none;">Create Task</a></li>
+            <li class="sidebar">
+                <a href="logout.php" style="text-decoration: none;">Logout</a>
+            </li>
+        </div>
     </ul>
 
     <div class="form-container">
         <form method="post">
-            <center><h2>Create Portfolio</h2></center>
+            <center>
+                <h2>Create Portfolio</h2>
+            </center>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required><br>
             <label for="description">Description:</label>
@@ -180,5 +150,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
 </body>
-</html>
 
+</html>
